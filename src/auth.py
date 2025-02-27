@@ -1,10 +1,14 @@
 import sqlite3
 import bcrypt
+import os
+
+# Definir o caminho correto dentro da pasta src
+db_path = os.path.join('src', 'users.db')
 
 # Função para registrar um novo usuário
 def register_user(username, password):
     # Conectar ao banco de dados
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # Verificar se o nome de usuário já existe
@@ -30,7 +34,7 @@ def register_user(username, password):
 # Função para obter todos os usuários do banco de dados
 def get_users():
     # Conectar ao banco de dados
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # Consultar todos os usuários
