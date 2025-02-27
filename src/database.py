@@ -1,8 +1,13 @@
 import sqlite3
+import os
 
 def create_table():
-    # Conectar ao banco de dados SQLite (será criado automaticamente)
-    conn = sqlite3.connect('users.db')
+    # Garantir que a pasta src existe
+    os.makedirs('src', exist_ok=True)
+
+    # Caminho do banco de dados dentro da pasta src
+    db_path = os.path.join('src', 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # Criar a tabela de usuários
@@ -18,5 +23,5 @@ def create_table():
     conn.commit()
     conn.close()
 
-# Chamar a função para garantir que a tabela seja criada
+# Criar a tabela
 create_table()
