@@ -1,34 +1,41 @@
-from auth import register_user, get_users
+from flask import Flask, render_template, request, redirect, url_for, flash
+import os
+from auth import register_user, validate_user
 
-def main():
-    while True:
-        # Perguntar se o usuário deseja registrar ou listar usuários
-        print("\nEscolha uma opção:")
-        print("1 - Registrar um novo usuário")
-        print("2 - Listar todos os usuários registrados")
-        print("3 - Sair")
-        escolha = input("Digite o número da opção: ")
+# Definir o caminho absoluto para a pasta templates dentro de src
+templates_path = os.path.abspath(os.path.join('src', 'templates'))
 
-        if escolha == "1":
-            # Solicitar nome de usuário e senha
-            username = input("Digite o nome de usuário: ")
-            password = input("Digite a senha: ")
-            register_user(username, password)
+app = Flask(__name__, template_folder=templates_path)
+app.secret_key = 'your_secret_key'  # Defina uma chave secreta para sessões
 
-        elif escolha == "2":
-            # Listar todos os usuários registrados
-            print("\nLista de usuários registrados:")
-            users = get_users()
-            for user in users:
-                print(f"ID: {user[0]}, Nome de usuário: {user[1]}, Hash da senha: {user[2]}")
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-        elif escolha == "3":
-            # Sair do programa
-            print("Saindo...")
-            break
-
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        if validate_user(username, password):
+            flash('Login bem-sucedido!', 'success')
+            return redirect(url_for('index'))
         else:
-            print("Opção inválida. Tente novamente.")
+            flash('Credenciais inválidas. Tente novamente.', 'danger')
+    
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        register_user(username, password)
+        flash(f'Usuário {username} registrado com sucesso!', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('register.html')
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
