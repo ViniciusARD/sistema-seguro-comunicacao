@@ -31,9 +31,8 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        register_user(username, password)
-        flash(f'Usuário {username} registrado com sucesso!', 'success')
-        return redirect(url_for('login'))
+        register_user(username, password)  # Chama a função de registro
+        return redirect(url_for('register'))  # Redireciona para a página de registro novamente
     
     return render_template('register.html')
 
