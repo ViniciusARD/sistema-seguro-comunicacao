@@ -3,10 +3,9 @@ import bcrypt
 import os
 from flask import flash
 
-# Definir o caminho correto dentro da pasta src
 db_path = os.path.join('src', 'users.db')
 
-## Função para registrar um novo usuário
+# Função para registrar um novo usuário
 def register_user(username, password):
     # Conectar ao banco de dados
     conn = sqlite3.connect(db_path)
@@ -50,5 +49,3 @@ def validate_user(username, password):
     
     conn.close()
     return False
-
-

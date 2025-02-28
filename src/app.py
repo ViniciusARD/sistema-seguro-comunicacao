@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-import os
 from auth import register_user, validate_user
+import os
 
 # Definir o caminho absoluto para a pasta templates dentro de src
 templates_path = os.path.abspath(os.path.join('src', 'templates'))
