@@ -37,12 +37,16 @@ def validate_user(username, password):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
+    cursor.execute('SELECT password_hash FROM users WHERE username = ?', (username,))
     user = cursor.fetchone()
 
     if user:
-        # Verificar se a senha corresponde ao hash armazenado
-        stored_password_hash = user[2]  # O hash da senha
+        stored_password_hash = user[0]  # Obtém o hash armazenado
+
+        # Garante que stored_password_hash seja do tipo bytes
+        if isinstance(stored_password_hash, str):
+            stored_password_hash = stored_password_hash.encode('utf-8')
+
         if bcrypt.checkpw(password.encode('utf-8'), stored_password_hash):
             conn.close()
             return True
