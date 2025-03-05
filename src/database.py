@@ -2,18 +2,20 @@ import sqlite3
 import os
 
 def create_table():
-    # Garantir que a pasta src existe
+    # Cria a pasta 'src' se ela não existir
     os.makedirs('src', exist_ok=True)
 
-    # Caminho do banco de dados dentro da pasta src
+    # Define o caminho do banco de dados na pasta 'src'
     db_path = os.path.join('src', 'users.db')
+
+    # Conecta ao banco de dados (cria se não existir)
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Apagar a tabela de usuários existente, se houver
+    # Apaga a tabela 'users' se ela já existir
     cursor.execute('DROP TABLE IF EXISTS users')
 
-    # Criar a nova tabela de usuários com os campos adicionais
+    # Cria a nova tabela com os campos: id, username, password_hash, failed_attempts, locked
     cursor.execute('''
         CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,9 +26,9 @@ def create_table():
         )
     ''')
 
-    # Commit e fechar a conexão
+    # Salva as alterações no banco de dados e fecha a conexão
     conn.commit()
     conn.close()
 
-# Criar a tabela (isso vai apagar a tabela antiga e criar uma nova)
+# Chama a função para criar a tabela
 create_table()
