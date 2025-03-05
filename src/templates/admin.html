@@ -1,33 +1,45 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Definindo o charset como UTF-8 para suportar caracteres especiais e acentuação -->
     <meta charset="UTF-8">
+    <!-- Configuração de responsividade para dispositivos móveis (tela adaptável) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título da página exibido na aba do navegador -->
     <title>Admin - Gerenciar Usuários</title>
 </head>
 <body>
+    <!-- Título principal da página -->
     <h1>Gerenciar Usuários</h1>
+
+    <!-- Tabela para exibir a lista de usuários -->
     <table border="1">
         <thead>
             <tr>
+                <!-- Cabeçalhos das colunas da tabela -->
                 <th>ID</th>
                 <th>Nome de Usuário</th>
-                <th>Hash da Senha</th> <!-- Nova coluna para o hash da senha -->
-                <th>Tentativas Falhas</th>
-                <th>Bloqueado</th>
-                <th>Ação</th>
+                <th>Hash da Senha</th> <!-- Exibe o hash da senha do usuário -->
+                <th>Tentativas Falhas</th> <!-- Exibe o número de tentativas falhas de login -->
+                <th>Bloqueado</th> <!-- Indica se o usuário está bloqueado -->
+                <th>Ação</th> <!-- Coluna para ações como excluir o usuário -->
             </tr>
         </thead>
         <tbody>
+            <!-- Laço para iterar sobre todos os usuários passados pelo backend -->
             {% for user in users %}
             <tr>
-                <td>{{ user[0] }}</td>
-                <td>{{ user[1] }}</td>
-                <td>{{ user[2] }}</td> <!-- Exibe o hash da senha -->
-                <td>{{ user[3] }}</td>
-                <td>{{ 'Sim' if user[4] == 1 else 'Não' }}</td>
+                <!-- Exibindo os dados do usuário nas células da tabela -->
+                <td>{{ user[0] }}</td> <!-- ID do usuário -->
+                <td>{{ user[1] }}</td> <!-- Nome de usuário -->
+                <td>{{ user[2] }}</td> <!-- Hash da senha do usuário -->
+                <td>{{ user[3] }}</td> <!-- Tentativas falhas de login -->
+                <!-- Verifica se o usuário está bloqueado (valor 1 é bloqueado, 0 não) -->
+                <td>{{ 'Sim' if user[4] == 1 else 'Não' }}</td> 
                 <td>
+                    <!-- Formulário para excluir um usuário com o ID correspondente -->
                     <form action="{{ url_for('delete_user_route', user_id=user[0]) }}" method="POST">
+                        <!-- Botão para submeter o formulário e excluir o usuário -->
                         <button type="submit">Excluir</button>
                     </form>
                 </td>
@@ -35,6 +47,8 @@
             {% endfor %}
         </tbody>
     </table>
+    
+    <!-- Link para voltar para a página inicial -->
     <a href="{{ url_for('index') }}">Voltar</a>
 </body>
 </html>
