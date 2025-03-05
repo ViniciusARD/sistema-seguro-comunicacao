@@ -10,12 +10,17 @@ def create_table():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Criar a tabela de usuários
+    # Apagar a tabela de usuários existente, se houver
+    cursor.execute('DROP TABLE IF EXISTS users')
+
+    # Criar a nova tabela de usuários com os campos adicionais
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE,
-            password_hash TEXT
+            password_hash TEXT,
+            failed_attempts INTEGER DEFAULT 0,
+            locked INTEGER DEFAULT 0
         )
     ''')
 
@@ -23,5 +28,5 @@ def create_table():
     conn.commit()
     conn.close()
 
-# Criar a tabela
+# Criar a tabela (isso vai apagar a tabela antiga e criar uma nova)
 create_table()
