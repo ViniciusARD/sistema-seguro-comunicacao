@@ -1,8 +1,8 @@
 import sqlite3
 import bcrypt
 import os
+from flask import flash
 
-# Definir o caminho correto dentro da pasta src
 db_path = os.path.join('src', 'users.db')
 
 # Função para registrar um novo usuário
@@ -14,10 +14,11 @@ def register_user(username, password):
     # Verificar se o nome de usuário já existe
     cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
     existing_user = cursor.fetchone()
+
     if existing_user:
-        print(f"Erro: O usuário '{username}' já existe.")
+        flash(f"Erro: O usuário '{username}' já existe.", 'danger')  # Usando flash para enviar a mensagem
         conn.close()
-        return
+        return  # Retornar sem fazer a inserção
 
     # Gerar o SALT e o hash da senha
     salt = bcrypt.gensalt()
@@ -26,22 +27,25 @@ def register_user(username, password):
     # Inserir o novo usuário na tabela
     cursor.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)', (username, password_hash))
     conn.commit()
-    print(f"Usuário '{username}' registrado com sucesso.")
+    flash(f"Usuário '{username}' registrado com sucesso.", 'success')  # Usando flash para enviar sucesso
 
     # Fechar a conexão
     conn.close()
 
-# Função para obter todos os usuários do banco de dados
-def get_users():
-    # Conectar ao banco de dados
+# Função para validar o login do usuário
+def validate_user(username, password):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Consultar todos os usuários
-    cursor.execute('SELECT id, username, password_hash FROM users')
-    users = cursor.fetchall()
+    cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
+    user = cursor.fetchone()
 
-    # Fechar a conexão
-    conn.close()
+    if user:
+        # Verificar se a senha corresponde ao hash armazenado
+        stored_password_hash = user[2]  # O hash da senha
+        if bcrypt.checkpw(password.encode('utf-8'), stored_password_hash):
+            conn.close()
+            return True
     
-    return users
+    conn.close()
+    return False
