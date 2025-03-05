@@ -58,12 +58,6 @@ def register():
     
     return render_template('register.html')
 
-@app.route('/logout')
-def logout():
-    session.pop('username', None)  # Remove o usuário da sessão
-    flash('Você foi desconectado.', 'success')
-    return redirect(url_for('login'))  # Redireciona para a página de login
-
 # Rodar o servidor Flask
 if __name__ == "__main__":
     app.run(debug=True)
