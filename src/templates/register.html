@@ -6,6 +6,7 @@
     <title>Registrar</title>
 </head>
 <body>
+    <!-- Título da página -->
     <h2>Registrar Usuário</h2>
 
     <!-- Exibir mensagens de erro ou sucesso -->
@@ -13,18 +14,28 @@
         {% if messages %}
             <ul>
                 {% for category, message in messages %}
+                    <!-- Exibe a mensagem com uma classe CSS correspondente à categoria -->
                     <li class="{{ category }}">{{ message }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
     {% endwith %}
 
+    <!-- Formulário de registro -->
     <form method="POST">
+        <!-- Campo para inserir o nome de usuário -->
         <label for="username">Nome de Usuário:</label>
         <input type="text" id="username" name="username" required><br><br>
+
+        <!-- Campo para inserir a senha -->
         <label for="password">Senha:</label>
         <input type="password" id="password" name="password" required><br><br>
+
+        <!-- Botão para enviar o formulário -->
         <button type="submit">Registrar</button>
     </form>
+
+    <!-- Link para a página de login -->
+    <a href="{{ url_for('login') }}">Já tem uma conta? Entre</a>
 </body>
 </html>

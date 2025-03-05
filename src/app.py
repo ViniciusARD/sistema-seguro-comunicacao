@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from auth import register_user, validate_user, get_users, delete_user
 import os
 
@@ -23,6 +23,7 @@ def login():
         
         # Valida o login utilizando a função do auth.py
         if validate_user(username, password):
+            session['username'] = username  # Armazena o nome de usuário na sessão
             flash('Login bem-sucedido!', 'success')
             return redirect(url_for('admin'))  # Redireciona para o painel de administração
         else:
@@ -33,6 +34,10 @@ def login():
 # Rota para o painel de administração (lista todos os usuários)
 @app.route('/admin')
 def admin():
+    if 'username' not in session:  # Verifica se o usuário está autenticado
+        flash('Por favor, faça login para acessar o painel de administração.', 'danger')
+        return redirect(url_for('login'))  # Redireciona para a página de login
+    
     users = get_users()  # Obtém todos os usuários com o hash da senha e informações adicionais
     return render_template('admin.html', users=users)
 
