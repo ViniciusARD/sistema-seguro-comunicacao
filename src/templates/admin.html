@@ -12,6 +12,7 @@
             <tr>
                 <th>ID</th>
                 <th>Nome de Usuário</th>
+                <th>Hash da Senha</th> <!-- Nova coluna para o hash da senha -->
                 <th>Tentativas Falhas</th>
                 <th>Bloqueado</th>
                 <th>Ação</th>
@@ -22,8 +23,9 @@
             <tr>
                 <td>{{ user[0] }}</td>
                 <td>{{ user[1] }}</td>
-                <td>{{ user[2] }}</td>
-                <td>{{ 'Sim' if user[3] == 1 else 'Não' }}</td>
+                <td>{{ user[2] }}</td> <!-- Exibe o hash da senha -->
+                <td>{{ user[3] }}</td>
+                <td>{{ 'Sim' if user[4] == 1 else 'Não' }}</td>
                 <td>
                     <form action="{{ url_for('delete_user_route', user_id=user[0]) }}" method="POST">
                         <button type="submit">Excluir</button>

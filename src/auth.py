@@ -27,12 +27,12 @@ def register_user(username, password):
 
     conn.close()
 
-# Função para obter todos os usuários
+# Função para obter todos os usuários, incluindo o hash da senha
 def get_users():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT id, username, failed_attempts, locked FROM users')
+    cursor.execute('SELECT id, username, password_hash, failed_attempts, locked FROM users')
     users = cursor.fetchall()
 
     conn.close()
